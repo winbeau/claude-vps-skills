@@ -15,7 +15,7 @@
 
 | Skill | 作用 | 来源 |
 |---|---|---|
-| [`latex-document-skill`](skills/latex-document-skill/) | 通用 LaTeX 文档：生成 / 编译 / PDF↔LaTeX 转换；彩色 **tcolorbox**、**中文 xeCJK**、TikZ/pgfplots 图表、简历/论文/海报/Beamer 等。**本仓加了 [`compile_tectonic.sh`](skills/latex-document-skill/scripts/compile_tectonic.sh) 适配 Tectonic 引擎** | [ndpvt-web/latex-document-skill](https://github.com/ndpvt-web/latex-document-skill)（MIT）；改动见 [ATTRIBUTION.md](skills/latex-document-skill/ATTRIBUTION.md) |
+| [`article-to-latex`](skills/article-to-latex/) | 通用 LaTeX 文档：生成 / 编译 / PDF↔LaTeX 转换；彩色 **tcolorbox**、**中文 xeCJK**、TikZ/pgfplots 图表、简历/论文/海报/Beamer 等。本仓 fork 自 `latex-document-skill`、改名以与 `article-to-html` 配对，并加了 [`compile_tectonic.sh`](skills/article-to-latex/scripts/compile_tectonic.sh) 适配 Tectonic 引擎 | [ndpvt-web/latex-document-skill](https://github.com/ndpvt-web/latex-document-skill)（MIT）；改动见 [ATTRIBUTION.md](skills/article-to-latex/ATTRIBUTION.md) |
 
 > vendored 副本为减重已去掉上游 `examples/` 与吉祥物 PNG（~19MB，对功能无影响），完整版见上游仓库。
 

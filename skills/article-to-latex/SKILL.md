@@ -1,5 +1,5 @@
 ---
-name: latex-document-skill
+name: article-to-latex
 description: >
   Universal LaTeX document skill: create, compile, and convert any document to
   professional PDF with PNG previews. Supports resumes, reports, cover letters,

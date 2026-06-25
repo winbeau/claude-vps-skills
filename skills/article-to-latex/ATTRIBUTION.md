@@ -1,7 +1,9 @@
-# Attribution — latex-document-skill
+# Attribution — article-to-latex (fork of latex-document-skill)
 
 This directory is a **vendored, lightly modified copy of a third-party skill**. It is *not*
 original work in this repo; it is redistributed here under its upstream MIT license.
+Locally **renamed to `article-to-latex`** (skill `name:` + directory) to pair with this repo's
+`article-to-html`; upstream is `latex-document-skill`. Functionality is unchanged.
 
 ## Upstream source
 
