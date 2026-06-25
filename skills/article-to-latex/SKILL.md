@@ -126,7 +126,7 @@ Convert existing PDFs (handwritten notes, printed reports, legal docs) to LaTeX.
 
 **Scaling strategy**: 1-10 pages = single agent; 11-20 pages = split in half (2 agents); 21+ pages = batch-7 pipeline (ceil(N/7) agents with `run_in_background: true`).
 
-**Conversion profiles** (in `references/profiles/`): `math-notes.md` (equations, theorems -- has beautiful mode), `business-document.md` (reports, memos), `legal-document.md` (contracts, statutes), `general-notes.md` (handwritten, mixed content).
+**Conversion profiles** (in `references/profiles/`): `math-notes.md` (equations, theorems -- has beautiful mode), `business-document.md` (reports, memos), `legal-document.md` (contracts, statutes), `general-notes.md` (handwritten, mixed content), `chinese-review-booklet.md` (中文期末复习/知识点速查 -- teal+rose rounded-card 版式, pairs with `chinese-review-booklet.tex`).
 
 ## Workflow: Fill PDF Forms
 
@@ -250,6 +250,7 @@ All 5 templates follow ATS rules: single-column, no graphics/images, no tables f
 ### Other Templates
 
 - **`lecture-notes.tex`** -- Beautiful lecture notes (`scrartcl` KOMA-Script class) with Palatino font, `microtype` typography, color-coded `tcolorbox` theorem environments (blue theorems, green definitions, orange examples, purple remarks), TikZ graph theory diagram styles and macros (`\CompleteGraph`, `\CycleGraph`, `\PathGraph`), styled section headings with `titlesec`, `fancyhdr` headers, `hyperref` + `cleveref` navigation. Ideal for converting handwritten math/science notes to beautiful PDFs. Includes graph theory custom commands (`\V`, `\E`, `\deg`, `\chr`). Used by the math-notes conversion profile in beautiful mode.
+- **`chinese-review-booklet.tex`** -- 中文期末复习手册 / 知识点速查 (`ctexart`, 11pt, **Tectonic/XeLaTeX**). Two-color (teal `#2F5C6E` + rose `#C0504D`) rounded-card layout reverse-engineered from a hand-made Chinese review sheet: `fancyhdr` colored running header, centered title block, `tcolorbox` callouts (`rvnote` 使用说明 / `rvlocator` 教材定位 / `rvbody` 题目正文外框), teal rounded question-tab macro `\rvq{第 N 题}{标题}`, navy table header + zebra-striped 速查表 (`\rowcolors`), rose bullets, `\imp` (pifont ★ via `\ding{72}` — never type a raw `★`). For Chinese exam-review material that should look polished instead of a plain Pandoc dump. Design tokens + macro reference: [references/profiles/chinese-review-booklet.md](references/profiles/chinese-review-booklet.md).
 - **`thesis.tex`** -- Thesis/dissertation (`book` class) with title page, declaration, abstract, acknowledgments, TOC, list of figures/tables, chapters, appendices, bibliography. Front matter uses roman numerals, main matter uses arabic. Includes theorem environments.
 - **`academic-cv.tex`** -- Multi-page academic CV with publications (journal/conference/preprint sections), grants and funding, teaching, advising (current/graduated students), awards, professional service, invited talks. ORCID and Google Scholar links.
 - **`book.tex`** -- Full book (`book` class) with half-title, title page, copyright page, dedication, preface, acknowledgments, TOC, list of figures/tables, parts, chapters, appendix, bibliography, index. Custom chapter headings, epigraphs, fancyhdr, microtype.
