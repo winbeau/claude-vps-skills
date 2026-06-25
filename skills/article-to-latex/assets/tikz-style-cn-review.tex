@@ -1,0 +1,24 @@
+% tikz-style-cn-review.tex —— 中文文档「ASCII 框图 → TikZ」共享样式（毛概青/玫红）
+% 用法：在正文 preamble \input 本文件（或把其中 \tikzset/\definecolor 复制进去）；
+%       ASCII→TikZ 转换出的每张图用其中的 rvmod/rvbase/rvaccent/rvann/rvarr 等样式。
+% 引擎：XeLaTeX / Tectonic（tcolorbox 会载入 tikz/pgf）。
+\usepackage[most]{tcolorbox}
+\usetikzlibrary{positioning,arrows.meta,fit,backgrounds,calc,shapes.geometric,shapes.arrows,chains}
+\definecolor{rvteal}{HTML}{2F5C6E}
+\definecolor{rvrose}{HTML}{C0504D}
+\definecolor{rvtealbg}{HTML}{EAF1F4}
+\definecolor{rvrosebg}{HTML}{FBEEEE}
+\definecolor{rvgray}{HTML}{6B6B6B}
+\tikzset{
+  rvmod/.style   ={draw=rvteal, fill=rvtealbg, rounded corners=3pt, line width=0.6pt, align=center, inner sep=4pt, font=\small},
+  rvbase/.style  ={draw=rvteal, fill=rvteal, text=white, rounded corners=4pt, line width=0.8pt, align=center, inner sep=5pt, font=\small},
+  rvaccent/.style={draw=rvrose, fill=rvrosebg, rounded corners=3pt, line width=0.6pt, align=center, inner sep=4pt, font=\small},
+  rvplain/.style ={draw=rvgray!55, fill=white, rounded corners=3pt, line width=0.5pt, align=center, inner sep=4pt, font=\small},
+  rvann/.style   ={rvrose, font=\footnotesize\bfseries, align=left, inner sep=1pt},
+  rvarr/.style   ={-{Stealth[length=2.4mm]}, rvteal, line width=0.8pt},
+  rvline/.style  ={rvteal, line width=0.8pt},
+}
+% 图题：\rvcap{标题}
+\newcommand{\rvcap}[1]{{\small\bfseries\color{rvteal} #1}\\[1.5mm]}
+% 语义：rvmod=普通模块框 · rvbase=主干/容器标题(实心青白字) · rvaccent=强调(玫红框)
+%       rvplain=中性灰框 · rvann=玫红"←说明"批注 · rvarr=青箭头 · rvline=青线

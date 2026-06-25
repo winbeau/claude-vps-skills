@@ -128,6 +128,18 @@ Convert existing PDFs (handwritten notes, printed reports, legal docs) to LaTeX.
 
 **Conversion profiles** (in `references/profiles/`): `math-notes.md` (equations, theorems -- has beautiful mode), `business-document.md` (reports, memos), `legal-document.md` (contracts, statutes), `general-notes.md` (handwritten, mixed content), `chinese-review-booklet.md` (中文期末复习/知识点速查 -- teal+rose rounded-card 版式, pairs with `chinese-review-booklet.tex`).
 
+## Workflow: ASCII diagrams → TikZ (beautify monospace box-art)
+
+When a doc (often Pandoc-converted Chinese notes) contains ASCII box-drawing diagrams
+(`┌─┐│└┘═║╔╝▲→` inside `\begin{verbatim}`), they render ugly/broken (CJK misalignment,
+box-drawing glyph tofu). Convert them to styled TikZ. Full method, hard-won pitfalls, and the
+shared teal/rose style (`assets/tikz-style-cn-review.tex`): [references/ascii-to-tikz.md](references/ascii-to-tikz.md).
+
+**Key rule**: for N≥4 diagrams, fan out a **workflow** (one agent per diagram). Each agent MUST
+render a PNG and **Read the image to self-verify no overlaps/collapse** — `compiled=true` does NOT
+mean it looks right (fit/label-based nesting compiles fine yet overlaps). Use explicit `(x,y)`
+coordinates for dense/nested layouts. Splice back bottom-to-top after re-extracting line ranges.
+
 ## Workflow: Fill PDF Forms
 
 Fill existing PDF forms -- both fillable (with form fields) and non-fillable (image-based). Full guide: [references/pdf-operations.md](references/pdf-operations.md).
