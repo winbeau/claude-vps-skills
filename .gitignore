@@ -1,0 +1,5 @@
+# tmux-ssh-remote runtime state (never commit real ssh cmds/hosts)
+skills/tmux-ssh-remote/.sessions/
+# OS / editor junk
+.DS_Store
+*.swp
