@@ -27,7 +27,7 @@ cp -r claude-vps-skills/skills/academic_writing ~/.claude/skills/
 
 ## 备注
 
-- **`notify-win`** 需要预先在本机装好 `notify-win` CLI（`~/.config/notify-win/config` 配主机/用户/端口/密钥）+ Windows 端 PowerShell 通知与计划任务桥接；SKILL.md 里的主机用 `<user>@<win-host>` 占位，按自己的 Tailscale 主机替换。
+- **`notify-win`** 目录自带完整实现：Linux CLI（`notify-win`）+ Windows 端脚本（`show.ps1` / `launcher.vbs` / `notify-setup-v2.ps1` / `notify-finish.ps1`）+ `config.example`，部署/架构/踩坑见该目录 `README.md`。所有主机/用户均为 `YOUR_WIN_HOST` / `YOUR_WIN_USER` / `<user>@<win-host>` 占位，按自己的 Tailscale 主机替换。上游 canonical 仓库：[`winbeau/notify-win`](https://github.com/winbeau/notify-win)。
 - **`tmux-ssh-remote`** 的 `.sessions/` 运行时状态不入库；脚本里的 `user@host:2222` 均为占位。
 - **`article-to-html`** 改编自 [`MagicCube/article-to-html-skill`](https://github.com/MagicCube/article-to-html-skill)，沿用其 "paper proposal" 设计系统。
 

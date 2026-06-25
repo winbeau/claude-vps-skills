@@ -60,3 +60,5 @@ notify-win -q -t 'ℹ️ 就绪' -m '后台已就绪'   # 静音
 ## 配置
 
 主机/用户/端口/密钥在 `~/.config/notify-win/config`。Windows 端声音/音量在 `~/.notify-win\show.ps1`（`$WAV` 改铃声、`$VOL` 改绝对音量百分比）。
+
+> **首次部署 / 新机重建**：本 skill 目录已自带 Linux CLI + Windows 端脚本与模板——`notify-win`、`config.example`、`show.ps1`、`launcher.vbs`、`notify-setup-v2.ps1`、`notify-finish.ps1`。架构、踩坑与逐步部署见同目录 [`README.md`](./README.md)。上游 canonical 仓库：<https://github.com/winbeau/notify-win>。
