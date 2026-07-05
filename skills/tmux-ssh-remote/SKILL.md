@@ -50,6 +50,36 @@ When the user names the host indirectly (e.g. "tailscale 那台 WSL"), use
 `tailscale status` to discover the peer hostname/IP, then SSH with whatever
 port/user the user mentioned (e.g. "注意 2222 端口").
 
+### 2.5 "连到本机 / my machine" — resolve via mybox
+
+When the user says **连到本机 / 连我电脑 / 我自己的机器 / my machine / my
+box** without naming a host, do NOT guess from `tailscale status`. Resolve
+the ssh command with `mybox`. Its rule is purely pwd-based (claude always
+runs as uid winbeau, so identity comes from where you run it):
+`/home/winbeau/<name>/...` → reads `/home/winbeau/<name>/.mybox.conf`;
+`/home/<user>/...` → reads `/home/<user>/.mybox.conf`.
+
+```bash
+SSH_CMD=$(/home/winbeau/bin/mybox ssh-cmd) &&
+~/.claude/skills/tmux-ssh-remote/tmux-ensure.sh "$SESSION" "$SSH_CMD"
+```
+
+Rules:
+- Run `mybox` **from the project/workspace directory** — identity is the
+  first path segment under /home/winbeau (or /home). A `cd /tmp && mybox`
+  errors out by design.
+- If it exits non-zero ("未找到 ...mybox.conf"), offer the guided setup:
+  invoke the **set-localhost** skill (picks the machine from tailscale
+  peers, writes the config, walks the user through key install, then
+  verifies). Quick manual alternative:
+  `mybox set <远端用户名>@<tailscale-ip>[:端口]`. Never invent an IP on
+  the user's behalf.
+- On connect failures run `/home/winbeau/bin/mybox doctor` — it TCP-probes,
+  tests key auth, and prints the exact public key the user must install on
+  their device (outbound ssh uses winbeau's key regardless of `$HOME`).
+- `mybox whoami` / `mybox show` are the debug views if the resolved
+  workspace or target looks wrong.
+
 ### 3. Inject every subsequent command via the helper
 
 ```bash
