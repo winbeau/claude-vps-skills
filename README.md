@@ -10,6 +10,7 @@
 | [`article-to-html`](skills/article-to-html/) | 把 markdown 草稿或对话内容渲染成**单文件**「论文提案」风 HTML：衬线正文 + 等宽元信息 + 编号节 + 内联 SVG 图 + callout + 表格 + 可选 JS 交互 | "渲染成网页 / turn this into HTML / 排版这段 / paper-style HTML" |
 | [`notify-win`](skills/notify-win/) | 经 SSH 在 Windows 桌面弹**静音 toast + 响亮报警铃**，长任务（训练/构建/下载）跑完提醒回桌面 | 通知到 win / 做完通知我 / "notify me on windows" |
 | [`tmux-ssh-remote`](skills/tmux-ssh-remote/) | 用**持久化 tmux 会话**驱动远程主机，保留 cwd / env / state，超时自动 kill+重连+重试 | 同时出现 "tmux" + "ssh"，或"连接/远程控制/drive"某台机器 |
+| [`xju-docx`](skills/xju-docx/) | 按**新疆大学论文规范**生成/规范化/校验/润色 docx：框架生成器（封面+目录域+GB8567 九章骨架）、Word97 `.doc` 提取器（**免 LibreOffice**）、python-docx 排版库（三级标题/分节页码/三线表）、机检器（`--json`/`--fix`/`--content`） | 规范论文格式 / 排版 docx / 生成论文框架 / 论文格式检查 / 三线表 / "按学校格式排版" |
 
 ## Vendored（第三方，MIT）
 
@@ -38,6 +39,7 @@ cp -r claude-vps-skills/skills/academic_writing ~/.claude/skills/
 - **`notify-win`** 目录自带完整实现：Linux CLI（`notify-win`）+ Windows 端脚本（`show.ps1` / `launcher.vbs` / `notify-setup-v2.ps1` / `notify-finish.ps1`）+ `config.example`，部署/架构/踩坑见该目录 `README.md`。所有主机/用户均为 `YOUR_WIN_HOST` / `YOUR_WIN_USER` / `<user>@<win-host>` 占位，按自己的 Tailscale 主机替换。上游 canonical 仓库：[`winbeau/notify-win`](https://github.com/winbeau/notify-win)。
 - **`tmux-ssh-remote`** 的 `.sessions/` 运行时状态不入库；脚本里的 `user@host:2222` 均为占位。
 - **`article-to-html`** 改编自 [`MagicCube/article-to-html-skill`](https://github.com/MagicCube/article-to-html-skill)，沿用其 "paper proposal" 设计系统。
+- **`xju-docx`** canonical 源在 [`XjuSelab/xju-feiyue`](https://github.com/XjuSelab/xju-feiyue) 的 `skills/xju-docx/`（可随该仓 `./skills/install.sh --global` 软链安装），本仓为独立拷贝。依赖 `python3 -m pip install --user python-docx olefile`（**无需 sudo / LibreOffice**）；配置方法与快速上手见该目录 [`README.md`](skills/xju-docx/README.md)。
 
 ## License
 
