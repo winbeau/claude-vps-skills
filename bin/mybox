@@ -1,0 +1,184 @@
+#!/usr/bin/env bash
+# mybox — 把「本机」(用户在 tailnet 上的设备) 绑定到当前工作区，并驱动 Claude
+# 的出站 SSH。背景：Claude 出站 ssh 恒以 winbeau 的 uid + 密钥运行
+# (/home/winbeau/.ssh/id_ed25519)，mybox 用 pwd 定位工作区，把绑定写在
+# <工作区根>/.mybox.conf。
+#
+# 本文件按 set-localhost skill 的调用契约逆向重建：
+#   whoami / set [--ssh-cmd] / show / ssh-cmd / doctor / help
+set -euo pipefail
+
+CONF_NAME=".mybox.conf"
+SSH_KEY="/home/winbeau/.ssh/id_ed25519"
+
+die() { echo "mybox: $*" >&2; exit 1; }
+
+# --- 工作区解析（靠 pwd）---------------------------------------------------
+#   /home/winbeau/<name>/...  -> 工作区 "<name>", 根 /home/winbeau/<name>
+#   /home/<user>/...          -> 工作区 "<user>",  根 /home/<user>
+# 设置全局 WS_NAME / WS_ROOT。pwd 在 /home 之外则报错。
+resolve_workspace() {
+  local p rest
+  p="$(realpath "$PWD" 2>/dev/null || echo "$PWD")"
+  WS_NAME=""; WS_ROOT=""
+  if [[ "$p" == /home/winbeau/* ]]; then
+    rest="${p#/home/winbeau/}"
+    WS_NAME="${rest%%/*}"
+    [[ -n "$WS_NAME" ]] && WS_ROOT="/home/winbeau/$WS_NAME"
+  elif [[ "$p" == /home/* ]]; then
+    rest="${p#/home/}"
+    WS_NAME="${rest%%/*}"
+    [[ -n "$WS_NAME" ]] && WS_ROOT="/home/$WS_NAME"
+  fi
+  [[ -n "$WS_ROOT" ]] || die "不在工作区里 (pwd=$p)；请先 cd 进 /home 下的工作区目录再运行 mybox"
+  CONF="$WS_ROOT/$CONF_NAME"
+}
+
+# 载入 .mybox.conf 到 MYBOX_* 全局；无配置则报错。
+load_conf() {
+  resolve_workspace
+  [[ -f "$CONF" ]] || die "工作区 '$WS_NAME' 尚未绑定 ($CONF)。运行: mybox set <user>@<ip>[:port]"
+  MYBOX_USER=""; MYBOX_HOST=""; MYBOX_PORT="22"; MYBOX_SSH_CMD=""
+  # shellcheck disable=SC1090
+  source "$CONF"
+}
+
+write_conf() {
+  local u="$1" h="$2" p="$3" s="$4"
+  {
+    echo "# mybox binding — workspace: $WS_NAME"
+    echo "# written: $(date '+%Y-%m-%d %H:%M:%S %z')"
+    echo "MYBOX_USER=\"$u\""
+    echo "MYBOX_HOST=\"$h\""
+    echo "MYBOX_PORT=\"$p\""
+    echo "MYBOX_SSH_CMD=\"$s\""
+  } > "$CONF"
+  chmod 600 "$CONF"
+}
+
+# 由已载入的 MYBOX_* 拼出有效 ssh 命令（单行，可直接复制/作为 SSH_CMD）。
+build_ssh_cmd() {
+  if [[ -n "${MYBOX_SSH_CMD:-}" ]]; then
+    printf '%s\n' "$MYBOX_SSH_CMD"
+    return
+  fi
+  local args=(ssh -i "$SSH_KEY" -o StrictHostKeyChecking=accept-new -o ConnectTimeout=10)
+  [[ "${MYBOX_PORT:-22}" != "22" ]] && args+=(-p "$MYBOX_PORT")
+  args+=("$MYBOX_USER@$MYBOX_HOST")
+  printf '%s\n' "${args[*]}"
+}
+
+# --- 子命令 ----------------------------------------------------------------
+cmd_whoami() {
+  resolve_workspace
+  echo "workspace: $WS_NAME"
+  echo "root:      $WS_ROOT"
+  if [[ -f "$CONF" ]]; then
+    echo "config:    $CONF (已绑定)"
+  else
+    echo "config:    $CONF (未绑定 — 运行: mybox set <user>@<ip>[:port])"
+  fi
+}
+
+cmd_show() {
+  load_conf
+  echo "  workspace: $WS_NAME"
+  if [[ -n "${MYBOX_SSH_CMD:-}" ]]; then
+    echo "  mode:      custom ssh-cmd"
+    echo "  ssh-cmd:   $MYBOX_SSH_CMD"
+  else
+    echo "  target:    $MYBOX_USER@$MYBOX_HOST"
+    echo "  port:      $MYBOX_PORT"
+    echo "  ssh-cmd:   $(build_ssh_cmd)"
+  fi
+}
+
+cmd_set() {
+  resolve_workspace
+  if [[ "${1:-}" == "--ssh-cmd" ]]; then
+    local sshcmd="${2:-}"
+    [[ -n "$sshcmd" ]] || die "--ssh-cmd 需要一个命令字符串"
+    write_conf "" "" "" "$sshcmd"
+  else
+    local target="${1:-}"
+    [[ -n "$target" ]] || die "用法: mybox set <user>@<ip>[:port]  |  mybox set --ssh-cmd \"<cmd>\""
+    [[ "$target" == *@* ]] || die "目标必须是 user@host[:port] 形式：$target"
+    local user="${target%%@*}" hostport="${target#*@}" host port
+    if [[ "$hostport" == *:* ]]; then
+      host="${hostport%%:*}"; port="${hostport##*:}"
+    else
+      host="$hostport"; port="22"
+    fi
+    [[ -n "$user" && -n "$host" ]] || die "目标解析失败：$target"
+    [[ "$port" =~ ^[0-9]+$ ]] || die "端口非法：$port"
+    write_conf "$user" "$host" "$port" ""
+  fi
+  echo "mybox: 已绑定工作区 '$WS_NAME' ->"
+  cmd_show
+}
+
+cmd_ssh_cmd() { load_conf; build_ssh_cmd; }
+
+cmd_doctor() {
+  load_conf
+  local rc=0
+  echo "mybox doctor — workspace '$WS_NAME'"
+  if [[ -n "${MYBOX_SSH_CMD:-}" ]]; then
+    echo "  mode: custom ssh-cmd (跳过 TCP 检查)"
+    printf "  免密 SSH ... "
+    if timeout 20 bash -c "$MYBOX_SSH_CMD -o BatchMode=yes -o ConnectTimeout=10 true" >/dev/null 2>&1; then
+      echo "通"; else echo "失败"; rc=1; fi
+    [[ $rc -eq 0 ]] && echo "  => 全通" || echo "  => 有失败项"
+    return $rc
+  fi
+  printf "  TCP %s:%s ... " "$MYBOX_HOST" "$MYBOX_PORT"
+  if timeout 6 nc -z "$MYBOX_HOST" "$MYBOX_PORT" >/dev/null 2>&1; then
+    echo "通"; else echo "失败 (对方 sshd 未开 / IP 或端口不对 / 设备离线)"; rc=1; fi
+  printf "  免密 SSH (%s@%s) ... " "$MYBOX_USER" "$MYBOX_HOST"
+  local args=(ssh -i "$SSH_KEY" -o BatchMode=yes -o StrictHostKeyChecking=accept-new -o ConnectTimeout=10)
+  [[ "$MYBOX_PORT" != "22" ]] && args+=(-p "$MYBOX_PORT")
+  args+=("$MYBOX_USER@$MYBOX_HOST" true)
+  if timeout 20 "${args[@]}" >/dev/null 2>&1; then
+    echo "通"; else echo "失败 (公钥未装? 运行 ssh-copy-id -i ${SSH_KEY}.pub ...)"; rc=1; fi
+  [[ $rc -eq 0 ]] && echo "  => 全通 ✅" || echo "  => 有失败项，见上"
+  return $rc
+}
+
+cmd_help() {
+  cat <<EOF
+mybox — 把「本机」(tailnet 设备) 绑定到当前工作区，驱动 Claude 出站 SSH。
+
+Claude 出站 ssh 恒以 winbeau 的 uid + 密钥运行 ($SSH_KEY)。mybox 用当前目录
+(pwd) 定位工作区，绑定写在 <工作区根>/$CONF_NAME。
+
+用法
+  mybox whoami                  显示 pwd 解析出的工作区 + 绑定状态
+  mybox set <user>@<ip>[:port]  绑定 SSH 目标 (端口默认 22)
+  mybox set --ssh-cmd "<cmd>"   用原始 ssh 命令绑定 (跳板 / 嵌套 ssh)
+  mybox show                    打印当前绑定 + 有效 ssh-cmd
+  mybox ssh-cmd                 只打印 ssh 命令 (供 tmux-ssh-remote 用)
+  mybox doctor                  检查 TCP 可达 + 免密(公钥)认证
+  mybox help                    本帮助
+
+工作区解析 (靠 pwd)
+  /home/winbeau/<name>/...  -> 工作区 "<name>", 根 /home/winbeau/<name>
+  /home/<user>/...          -> 工作区 "<user>",  根 /home/<user>
+  请在工作区目录里运行 mybox。
+EOF
+}
+
+main() {
+  local cmd="${1:-help}"
+  shift || true
+  case "$cmd" in
+    whoami)          cmd_whoami "$@" ;;
+    set)             cmd_set "$@" ;;
+    show)            cmd_show "$@" ;;
+    ssh-cmd)         cmd_ssh_cmd "$@" ;;
+    doctor)          cmd_doctor "$@" ;;
+    help|-h|--help)  cmd_help ;;
+    *)               die "未知命令: $cmd (试试: mybox help)" ;;
+  esac
+}
+
+main "$@"
