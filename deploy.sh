@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+# deploy.sh — 在新机器上一键部署本仓库到 ~/.claude（幂等，可反复运行）
+#
+#   1) 把 skills/* 全部软链到 ~/.claude/skills/
+#   2) 把 global/CLAUDE.md 软链到 ~/.claude/CLAUDE.md（原有非软链文件先备份）
+#   3) 写 ~/.claude/settings.json：终端原生滚动（关闭 fullscreen / alternate screen）
+set -euo pipefail
+
+REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+CLAUDE_DIR="${HOME}/.claude"
+SKILLS_DIR="${CLAUDE_DIR}/skills"
+
+echo "==> 仓库: $REPO"
+mkdir -p "$SKILLS_DIR"
+
+# 1) 同步 skills ------------------------------------------------------------
+echo "==> 同步 skills -> $SKILLS_DIR"
+for d in "$REPO"/skills/*/; do
+  [ -d "$d" ] || continue
+  name="$(basename "$d")"
+  ln -sfn "$d" "$SKILLS_DIR/$name"
+  echo "    linked skill: $name"
+done
+
+# 2) 全局 CLAUDE.md ---------------------------------------------------------
+echo "==> 链接全局 CLAUDE.md"
+target="$CLAUDE_DIR/CLAUDE.md"
+if [ -e "$target" ] && [ ! -L "$target" ]; then
+  cp -a "$target" "${target}.bak.$(date +%s)"
+  echo "    已备份原有 CLAUDE.md -> ${target}.bak.*"
+fi
+ln -sfn "$REPO/global/CLAUDE.md" "$target"
+echo "    linked CLAUDE.md -> $REPO/global/CLAUDE.md"
+
+# 3) 终端原生滚动 -----------------------------------------------------------
+echo "==> 配置终端原生滚动 (关闭 fullscreen)"
+python3 - "$CLAUDE_DIR/settings.json" <<'PY'
+import json, os, shutil, sys
+p = sys.argv[1]
+s = {}
+if os.path.exists(p):
+    try:
+        with open(p) as f:
+            s = json.load(f)
+    except json.JSONDecodeError:
+        shutil.copyfile(p, p + ".bak")
+        print("    原 settings.json 无法解析，已备份为 settings.json.bak，重建")
+        s = {}
+s["tui"] = "default"
+env = s.get("env") or {}
+env["CLAUDE_CODE_DISABLE_ALTERNATE_SCREEN"] = "1"
+s["env"] = env
+os.makedirs(os.path.dirname(p), exist_ok=True)
+with open(p, "w") as f:
+    json.dump(s, f, indent=2, ensure_ascii=False)
+    f.write("\n")
+print("    settings.json: tui=default, env.CLAUDE_CODE_DISABLE_ALTERNATE_SCREEN=1")
+PY
+
+echo
+echo "==> 完成 ✅"
+echo "    · skills 与全局 CLAUDE.md 已软链，git pull 后自动同步"
+echo "    · 滚动模式改动需【重开 claude】生效（当前会话可先输入 /tui default）"
