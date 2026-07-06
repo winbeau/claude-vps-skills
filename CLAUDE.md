@@ -10,7 +10,7 @@
 
 1. **同步 skills** — 把 `skills/*` 全部软链到 `~/.claude/skills/`
 2. **全局 CLAUDE.md** — 把 `global/CLAUDE.md` 软链到 `~/.claude/CLAUDE.md`（原有非软链文件会先备份）
-3. **终端原生滚动** — 更新 `~/.claude/settings.json`：`tui=default` + `env.CLAUDE_CODE_DISABLE_ALTERNATE_SCREEN=1`，关闭 fullscreen/alternate screen，改用终端自己的滚动条
+3. **终端原生滚动 + 默认 auto 放行** — 更新 `~/.claude/settings.json`：`tui=default` + `env.CLAUDE_CODE_DISABLE_ALTERNATE_SCREEN=1`（关闭 fullscreen/alternate screen，改用终端自己的滚动条），以及 `permissions.defaultMode=auto`（分类器守护的全自动放行模式，必须在用户级设置里）
 
 跑完后**提醒我**：滚动模式改动需要**重开 claude** 才生效（当前会话可先输入 `/tui default` 立即切换）。
 

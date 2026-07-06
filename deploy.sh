@@ -32,8 +32,8 @@ fi
 ln -sfn "$REPO/global/CLAUDE.md" "$target"
 echo "    linked CLAUDE.md -> $REPO/global/CLAUDE.md"
 
-# 3) 终端原生滚动 -----------------------------------------------------------
-echo "==> 配置终端原生滚动 (关闭 fullscreen)"
+# 3) 终端原生滚动 + 默认 auto 放行模式 --------------------------------------
+echo "==> 配置终端原生滚动 + 默认 auto 放行模式"
 python3 - "$CLAUDE_DIR/settings.json" <<'PY'
 import json, os, shutil, sys
 p = sys.argv[1]
@@ -50,11 +50,15 @@ s["tui"] = "default"
 env = s.get("env") or {}
 env["CLAUDE_CODE_DISABLE_ALTERNATE_SCREEN"] = "1"
 s["env"] = env
+# 默认放行模式 auto（分类器守护全自动；必须在用户级 ~/.claude/settings.json，项目级会被忽略）
+perm = s.get("permissions") or {}
+perm["defaultMode"] = "auto"
+s["permissions"] = perm
 os.makedirs(os.path.dirname(p), exist_ok=True)
 with open(p, "w") as f:
     json.dump(s, f, indent=2, ensure_ascii=False)
     f.write("\n")
-print("    settings.json: tui=default, env.CLAUDE_CODE_DISABLE_ALTERNATE_SCREEN=1")
+print("    settings.json: tui=default, CLAUDE_CODE_DISABLE_ALTERNATE_SCREEN=1, permissions.defaultMode=auto")
 PY
 
 echo
