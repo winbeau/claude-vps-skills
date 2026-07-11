@@ -1,9 +1,9 @@
 ---
-name: academic_writing
+name: academic-writing
 description: >
   Audit and rewrite academic prose to kill AI-slop (canned vocabulary, em-dash
-  abuse, forced-contrast filler) AND enforce logic closure (Claim -> Evidence/
-  Mechanism -> Impact/Limitation, no qualitative filler, quantitative placeholders
+  abuse, forced-contrast filler) AND enforce logic closure from Claim to Evidence,
+  Mechanism, Impact, or Limitation, with no qualitative filler and quantitative placeholders
   required). Domain-aware for CS / deep learning (Transformer, KV cache, attention,
   quantization): replaces grand narrative with concrete physical/mathematical
   actions. Trigger when the user asks to polish / 润色 / 改写 / 降AI味 / 学术化
@@ -14,7 +14,7 @@ description: >
   Imbad0202/academic-research-skills (CER/TEEL logic chains).
 ---
 
-# academic_writing — Anti-Slop · Logic-Closure · Domain-Semantic
+# academic-writing — Anti-Slop · Logic-Closure · Domain-Semantic
 
 > 三个硬门禁(GATE)是无条件的。任何输出在交付前必须依次通过 G1→G2→G3,
 > 并在结尾打印 `<self-check>` 通过表。门禁不是建议,是 PASS/FAIL。

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Tmux SSH Remote"
+  short_description: "Operate remote hosts through persistent tmux SSH"
+  default_prompt: "Use $tmux-ssh-remote to connect to this host and keep a persistent remote shell."

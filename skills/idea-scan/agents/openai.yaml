@@ -1,0 +1,4 @@
+interface:
+  display_name: "Idea Scan"
+  short_description: "Map evidence-backed gaps across research domains"
+  default_prompt: "Use $idea-scan to scan this research area and identify evidence-backed opportunity signals."

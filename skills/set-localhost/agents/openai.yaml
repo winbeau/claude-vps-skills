@@ -1,0 +1,4 @@
+interface:
+  display_name: "Set Localhost"
+  short_description: "Bind the users tailnet device for remote access"
+  default_prompt: "Use $set-localhost to bind my local device for the mybox remote workflow."

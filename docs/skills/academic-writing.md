@@ -1,8 +1,8 @@
-# academic_writing
+# academic-writing
 
 学术散文审计与改写 skill：**杀 AI 味** + **强制逻辑闭环** + **领域语义具体化**。面向 CS / 深度学习（Transformer、KV cache、attention、量化）等方向，把"宏大叙事"换成具体的物理/数学动作。
 
-> 完整指令与判定规则见 [`SKILL.md`](./SKILL.md)。本文件是给人看的概览。
+> 完整指令与判定规则见 [`SKILL.md`](../../skills/academic-writing/SKILL.md)。本文件是给人看的概览。
 
 ## 它做什么
 

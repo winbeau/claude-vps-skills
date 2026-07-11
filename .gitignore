@@ -1,8 +1,10 @@
 # tmux-ssh-remote runtime state (never commit real ssh cmds/hosts)
-skills/tmux-ssh-remote/.sessions/
+skills/tmux-ssh-remote/scripts/.sessions/
 # Python/runtime artifacts from bundled helper scripts
 __pycache__/
 *.py[cod]
 # OS / editor junk
 .DS_Store
 *.swp
+*.swo
+*~

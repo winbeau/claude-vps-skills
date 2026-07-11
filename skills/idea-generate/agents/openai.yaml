@@ -1,0 +1,4 @@
+interface:
+  display_name: "Idea Generate"
+  short_description: "Generate testable ideas from scans and user hints"
+  default_prompt: "Use $idea-generate to generate testable candidates from the scan and my research hint."

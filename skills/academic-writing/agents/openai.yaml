@@ -1,0 +1,4 @@
+interface:
+  display_name: "Academic Writing"
+  short_description: "Audit and rewrite rigorous academic prose"
+  default_prompt: "Use $academic-writing to tighten this academic passage without adding facts."

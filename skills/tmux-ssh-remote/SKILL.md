@@ -1,6 +1,11 @@
 ---
 name: tmux-ssh-remote
-description: Use this skill when the user wants to operate a remote host via SSH using a persistent tmux session (e.g. mentions both "tmux" and "ssh", asks to "connect", "remote control", or "drive" a remote machine like WSL / GPU box / lab server). The skill sets up a project-named tmux session holding the SSH connection, then injects every subsequent command via the generalized helper script ~/.claude/skills/tmux-ssh-remote/tmux-inject.sh — preserving cwd / env / state across turns and avoiding fresh SSH overhead. Includes auto-recover on timeout: a hung session is killed and respawned using a saved ssh-cmd, then the command is retried once.
+description: >
+  Operate a remote host through SSH in a persistent tmux session, preserving cwd,
+  environment, shell state, and history across turns. Use when the user mentions
+  tmux with SSH, asks to connect to or control a remote WSL, GPU box, lab server,
+  or wants multiple commands run in one persistent remote shell. Includes one-shot
+  recovery when a session is missing or unresponsive.
 ---
 
 # tmux-ssh-remote
@@ -37,11 +42,11 @@ project. Do NOT reuse a generic name like `wsl` or `remote`.
 ### 2. Ensure the session exists (idempotent)
 
 ```bash
-~/.claude/skills/tmux-ssh-remote/tmux-ensure.sh "$SESSION" 'ssh -p 2222 user@host'
+~/.claude/skills/tmux-ssh-remote/scripts/tmux-ensure.sh "$SESSION" 'ssh -p 2222 user@host'
 ```
 
 - First time: persists the ssh-cmd to
-  `~/.claude/skills/tmux-ssh-remote/.sessions/<session>.cmd` and creates the
+  `~/.claude/skills/tmux-ssh-remote/scripts/.sessions/<session>.cmd` and creates the
   session.
 - Subsequent calls: no-op if the session is healthy (1s `true` probe).
 - `--force` flag: kill + recreate even if healthy.
@@ -61,7 +66,7 @@ runs as uid winbeau, so identity comes from where you run it):
 
 ```bash
 SSH_CMD=$(/home/winbeau/bin/mybox ssh-cmd) &&
-~/.claude/skills/tmux-ssh-remote/tmux-ensure.sh "$SESSION" "$SSH_CMD"
+~/.claude/skills/tmux-ssh-remote/scripts/tmux-ensure.sh "$SESSION" "$SSH_CMD"
 ```
 
 Rules:
@@ -83,7 +88,7 @@ Rules:
 ### 3. Inject every subsequent command via the helper
 
 ```bash
-~/.claude/skills/tmux-ssh-remote/tmux-inject.sh -t 120 --auto-recover \
+~/.claude/skills/tmux-ssh-remote/scripts/tmux-inject.sh -t 120 --auto-recover \
     "$SESSION" 'cd ~/proj && uv run pytest'
 ```
 
@@ -148,10 +153,11 @@ uses the helpers.
 ```
 ~/.claude/skills/tmux-ssh-remote/
 ├── SKILL.md           this file
-├── tmux-ensure.sh     session lifecycle: bind ssh-cmd + create / health-check / respawn
-├── tmux-inject.sh     command injector with optional --auto-recover
-└── .sessions/         per-session saved ssh-cmd (created on first ensure)
-    └── <session>.cmd
+└── scripts/
+    ├── tmux-ensure.sh session lifecycle: bind ssh-cmd + create / health-check / respawn
+    ├── tmux-inject.sh command injector with optional --auto-recover
+    └── .sessions/     per-session saved ssh-cmd (created on first ensure)
+        └── <session>.cmd
 ```
 
 `.sessions/` is local state, not part of the skill code — safe to delete to

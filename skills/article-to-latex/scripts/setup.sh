@@ -6,13 +6,14 @@
 #           Alpine (apk), Arch Linux (pacman).
 #
 # Usage:
-#   bash setup.sh           # Install everything
-#   bash setup.sh --check   # Only run verification (no installs)
+#   bash scripts/setup.sh           # Install everything
+#   bash scripts/setup.sh --check   # Only run verification (no installs)
 
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "${SCRIPT_DIR}/scripts/install_deps.sh"
+SKILL_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
+source "${SCRIPT_DIR}/install_deps.sh"
 
 CHECK_ONLY=false
 if [[ "${1:-}" == "--check" ]]; then
@@ -98,7 +99,7 @@ if [[ "$CHECK_ONLY" == false ]]; then
     echo "   Done."
   else
     echo "   WARNING: python3 not found. Skipping Python package installation."
-    echo "   Install Python 3 and run: pip install -r requirements.txt"
+    echo "   Install Python 3 and run: pip install -r scripts/requirements.txt"
   fi
   echo ""
 

@@ -1,8 +1,6 @@
 ---
 name: notify-win
-description: 向 Windows 桌面弹一条通知（静音 toast + 响亮报警铃）。当用户说"通知到win/通知到windows/通知我/弹窗通知我/做完通知我/跑完通知我/弹个窗提醒我"，或英文 "notify me on windows / ping my windows / send a windows toast / windows notification" 时使用；常见于长任务（训练、构建、下载）跑完后提醒用户回到 Windows 桌面。
-when_to_use: 用户想在 Windows 桌面收到弹窗+响铃提醒。触发短语（中）：通知到win、通知到windows、通知我（到windows）、弹窗通知我、做完通知我、跑完通知我、任务完成通知、弹个窗。触发短语（英）：notify me on windows、ping my windows、windows toast、pop a windows alert、send me a windows notification。不要用于：邮件/Slack/手机推送等非 Windows 桌面通知。
-allowed-tools: Bash
+description: 向 Windows 桌面弹一条通知，包含静音 toast 和响铃提醒。Use when the user asks to notify or ping Windows, send a Windows toast, pop a desktop alert, or remind them after a long task such as training, build, download, or remote job completion. Do not use for email, Slack, or phone notifications.
 ---
 
 # notify-win — 向 Windows 桌面弹通知
@@ -61,4 +59,4 @@ notify-win -q -t 'ℹ️ 就绪' -m '后台已就绪'   # 静音
 
 主机/用户/端口/密钥在 `~/.config/notify-win/config`。Windows 端声音/音量在 `~/.notify-win\show.ps1`（`$WAV` 改铃声、`$VOL` 改绝对音量百分比）。
 
-> **首次部署 / 新机重建**：本 skill 目录已自带 Linux CLI + Windows 端脚本与模板——`notify-win`、`config.example`、`show.ps1`、`launcher.vbs`、`notify-setup-v2.ps1`、`notify-finish.ps1`。架构、踩坑与逐步部署见同目录 [`README.md`](./README.md)。上游 canonical 仓库：<https://github.com/winbeau/notify-win>。
+> **首次部署 / 新机重建**：本 skill 目录已自带 Linux CLI `scripts/notify-win`、配置模板 `assets/config.example`，以及 `scripts/windows/` 下的 Windows 脚本。架构、踩坑与逐步部署见仓库文档 `docs/skills/notify-win.md`。上游 canonical 仓库：<https://github.com/winbeau/notify-win>。

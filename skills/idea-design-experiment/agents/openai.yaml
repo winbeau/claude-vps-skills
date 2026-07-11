@@ -1,0 +1,4 @@
+interface:
+  display_name: "Idea Experiment Design"
+  short_description: "Design low-cost falsifiable research experiments"
+  default_prompt: "Use $idea-design-experiment to design a minimal falsifiable experiment for the shortlisted idea."

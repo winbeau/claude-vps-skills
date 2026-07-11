@@ -1,8 +1,8 @@
 # .chktexrc - chktex configuration for the latex-document skill
 # Suppresses false positives common in generated LaTeX documents.
 #
-# Place this file alongside .tex files or in the skill root.
-# Usage: chktex -l /path/to/.chktexrc document.tex
+# Bundled under the Skill's assets directory.
+# Usage: chktex -l /path/to/skill/assets/chktexrc document.tex
 #
 # Severity levels: 0 = ignore, 1 = message, 2 = warning, 3 = error
 

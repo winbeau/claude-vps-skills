@@ -1,0 +1,6 @@
+interface:
+  display_name: "Idea Synthesize"
+  short_description: "Coordinate and summarize the idea discovery workflow"
+  default_prompt: "Use $idea-synthesize to coordinate the workflow and produce a ranked final recommendation."
+policy:
+  allow_implicit_invocation: false

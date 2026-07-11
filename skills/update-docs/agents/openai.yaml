@@ -1,0 +1,4 @@
+interface:
+  display_name: "Update Feiyue Docs"
+  short_description: "Update Feiyue release notes and public docs"
+  default_prompt: "Use $update-docs to update the Feiyue README, timeline, and version record."

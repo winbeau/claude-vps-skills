@@ -1,63 +1,13 @@
 ---
 name: article-to-latex
 description: >
-  Universal LaTeX document skill: create, compile, and convert any document to
-  professional PDF with PNG previews. Supports resumes, reports, cover letters,
-  invoices, academic papers, theses/dissertations, academic CVs, presentations
-  (Beamer), scientific posters, formal letters, exams/quizzes, books,
-  cheat sheets, reference cards, exam formula sheets,
-  fillable PDF forms (hyperref form fields), conditional content (etoolbox toggles),
-  mail merge from CSV/JSON (Jinja2 templates), version diffing (latexdiff),
-  charts (pgfplots + matplotlib), tables (booktabs + CSV import), images (TikZ),
-  Mermaid diagrams, AI-generated images, watermarks, landscape pages,
-  bibliography/citations (BibTeX/biblatex), multi-language/CJK (auto XeLaTeX),
-  algorithms/pseudocode, colored boxes (tcolorbox), SI units (siunitx),
-  Pandoc format conversion (Markdown/DOCX/HTML ↔ LaTeX),
-  and PDF-to-LaTeX conversion of handwritten or printed documents (math, business,
-  legal, general). Compile script supports pdflatex, xelatex, lualatex with
-  auto-detection, latexmk backend, texfot log filtering, PDF/A output, and
-  verbosity control (--verbose/--quiet). Empirically optimized scaling: single agent 1-10 pages, split
-  11-20, batch-7 pipeline 21+. Use when user asks to: (1) create a resume/CV/cover
-  letter, (2) write a LaTeX document, (3) create PDF with tables/charts/images,
-  (4) compile a .tex file, (5) make a report/invoice/presentation, (6) anything
-  involving LaTeX or pdflatex, (7) convert/OCR a PDF to LaTeX, (8) convert
-  handwritten notes, (9) create charts/graphs/diagrams, (10) create slides,
-  (11) write a thesis or dissertation, (12) create an academic CV, (13) create
-  a poster, (14) create an exam/quiz, (15) create a book, (16) convert between
-  document formats (Markdown, DOCX, HTML to/from LaTeX), (17) generate Mermaid
-  diagrams for LaTeX, (18) create a formal business letter, (19) create a cheat
-  sheet or reference card, (20) create an exam formula sheet or crib sheet,
-  (21) condense lecture notes/PDFs into a cheat sheet,
-  (22) create a fillable PDF form with text fields/checkboxes/dropdowns,
-  (23) create a document with conditional content/toggles (show/hide sections),
-  (24) generate batch/mail-merge documents from CSV/JSON data,
-  (25) create a version diff PDF (latexdiff) highlighting changes between documents,
-  (26) create a homework or assignment submission with problems and solutions,
-  (27) create a lab report with data tables, graphs, and error analysis,
-  (28) encrypt or password-protect a PDF,
-  (29) merge multiple PDFs into one,
-  (30) optimize/compress a PDF for web or email,
-  (31) lint or check a LaTeX document for common issues,
-  (32) count words in a LaTeX document,
-  (33) analyze document statistics (figures, tables, citations),
-  (34) fetch BibTeX from a DOI,
-  (35) convert a Graphviz .dot file to PDF/PNG,
-  (36) convert a PlantUML .puml file to PDF/PNG,
-  (37) create a one-pager/fact sheet/executive summary,
-  (38) create a datasheet or product specification sheet,
-  (39) extract pages from a PDF (page ranges, odd/even),
-  (40) check LaTeX package availability before compiling,
-  (41) analyze citations and cross-reference with .bib files,
-  (42) debug LaTeX compilation errors,
-  (43) make a document accessible (PDF/A, tagged PDF),
-  (44) create lecture notes or course handouts,
-  (45) fill an existing PDF form (fillable fields or non-fillable with annotations),
-  (46) extract text or tables from a PDF (pdfplumber, pypdf),
-  (47) OCR a scanned PDF to text (pytesseract),
-  (48) create a PDF programmatically with reportlab (Canvas, Platypus),
-  (49) rotate or crop PDF pages (pypdf),
-  (50) add a watermark to an existing PDF,
-  (51) extract metadata from a PDF (title, author, subject).
+  Create, compile, debug, and convert LaTeX documents to professional PDFs with
+  previews. Use for resumes, reports, cover letters, invoices, academic papers,
+  theses, Beamer slides, posters, letters, exams, books, cheat sheets, fillable
+  forms, mail merge, diffing, charts, tables, TikZ, Mermaid, Graphviz, PlantUML,
+  PDF operations, OCR, bibliography, CJK typesetting, or document conversion
+  whenever the user asks for LaTeX, TeX, PDF generation, typesetting, compiling,
+  debugging, or format conversion.
 ---
 
 # LaTeX Document Skill
@@ -73,11 +23,11 @@ Create any LaTeX document, compile to PDF, and generate PNG previews. Convert PD
 ## Workflow: Create Documents
 
 1. Determine document type (resume, report, letter, invoice, article, thesis, academic CV, presentation, poster, exam, book, cheat sheet)
-2. **If the target is an IEEE journal / Transactions / IEEE two-column paper:** Read [references/ieee-journal-twocolumn-guide.md](references/ieee-journal-twocolumn-guide.md) before choosing a template. Start from `examples/ieee-twocolumn-sample.tex` for a working IEEEtran baseline and use `examples/ieee-twocolumn.png` / `examples/ieee-twocolumn-p1.png` / `examples/ieee-twocolumn-p2.png` as visual references.
+2. **If the target is an IEEE journal / Transactions / IEEE two-column paper:** Read [references/ieee-journal-twocolumn-guide.md](references/ieee-journal-twocolumn-guide.md) before choosing a template and adapt `assets/templates/academic-paper.tex` to the requested venue.
 3. **If poster:** Run the poster sub-workflow (see [Poster Sub-Workflow](#poster-sub-workflow) below), then skip to step 5.
 4. **If cheat sheet / reference card:** Run the cheat sheet sub-workflow (see [Cheat Sheet / Reference Card Sub-Workflow](#cheat-sheet--reference-card-sub-workflow) below), then skip to step 5.
 5. **Ask the user which enrichment elements they want** (use AskUserQuestion tool with multiSelect). Offer relevant options based on document type:
-   - **AI-generated images** -- custom illustrations, diagrams, photos (uses generate-image skill)
+   - **AI-generated images** -- custom illustrations, diagrams, or photos when the host provides image generation
    - **Charts/graphs** -- bar, line, pie, scatter, heatmap (pgfplots or matplotlib)
    - **Flowcharts/diagrams** -- process flows, architecture, decision trees (TikZ or Mermaid)
    - **Citations/bibliography** -- academic references, footnotes, works cited (BibTeX/biblatex)
@@ -87,7 +37,7 @@ Create any LaTeX document, compile to PDF, and generate PNG previews. Convert PD
 6. Copy the appropriate template from `assets/templates/` or write from scratch
 7. Customize content based on user requirements
 8. Generate external assets based on user's element choices:
-   - AI images: `python3 <skill_path>/../generate-image/scripts/generate_image.py "prompt" --output ./outputs/figure.png`
+   - AI images: use the host's available image-generation capability; do not assume a sibling skill exists.
    - matplotlib charts: `python3 <skill_path>/scripts/generate_chart.py <type> --data '<json>' --output chart.png`
    - Mermaid diagrams: `bash <skill_path>/scripts/mermaid_to_image.sh diagram.mmd output.png`
 9. **For documents 5+ pages:** Review the [Long-Form Document Anti-Patterns](#long-form-document-anti-patterns-must-read-for-reports-theses-books) section and run the Content Generation Checklist before compiling. Key rules: prefer prose over bullets, include global list compaction, escape `<`/`>` in text mode, vary section formats, limit `\newpage`, size images at 0.75-0.85 textwidth.
@@ -277,7 +227,6 @@ All 5 templates follow ATS rules: single-column, no graphics/images, no tables f
 - **`cover-letter.tex`** -- Professional cover letter with sender/recipient blocks
 - **`invoice.tex`** -- Invoice with company header, line items table, subtotal/tax/total
 - **`academic-paper.tex`** -- Research paper with abstract, sections, bibliography, figures. Includes example `.bib` file (`references.bib`) for BibTeX citations.
-- **`examples/ieee-twocolumn-sample.tex`** -- IEEE Transactions / journal example using `\documentclass[journal,10pt]{IEEEtran}` with abstract, keywords, single-column figure, single-column table, full-width table, and numeric bibliography. Use with [references/ieee-journal-twocolumn-guide.md](references/ieee-journal-twocolumn-guide.md). Preview PNGs: `examples/ieee-twocolumn.png`, `examples/ieee-twocolumn-p1.png`, `examples/ieee-twocolumn-p2.png`.
 - **`presentation.tex`** -- Beamer presentation with title slide, content frames, columns
 - **`fillable-form.tex`** -- Fillable PDF form (`article` class) with hyperref form fields: text inputs, checkboxes, radio buttons, dropdowns, push buttons. Two-column layout with `tabularx`. Custom `\FormField`, `\FormCheck`, `\FormDropdown` helper commands. Requires Adobe Reader for full form support (browser PDF viewers have limited form capabilities).
 - **`conditional-document.tex`** -- Configurable document (`article` class) with etoolbox toggle system: show/hide TOC, appendix, watermark, draft mode, confidential marking, abstract. Template variables via `\providecommand` (title, author, org, version). Three visual profiles (corporate, academic, minimal). Supports command-line variable passing for CI/CD.
@@ -309,7 +258,7 @@ bash <skill_path>/scripts/compile_latex.sh ./outputs/my_resume.tex --preview --p
 | Cover letter | `cover-letter.tex` | `article` |
 | Invoice | `invoice.tex` | `article` |
 | Academic paper | `academic-paper.tex` + `references.bib` | `article` |
-| IEEE journal, IEEE Transactions, IEEE two-column paper | `examples/ieee-twocolumn-sample.tex` + [ieee-journal-twocolumn-guide.md](references/ieee-journal-twocolumn-guide.md) | `IEEEtran` |
+| IEEE journal, IEEE Transactions, IEEE two-column paper | Adapt `academic-paper.tex` using [ieee-journal-twocolumn-guide.md](references/ieee-journal-twocolumn-guide.md) | `IEEEtran` |
 | Book | `book.tex` | `book` |
 | Scientific poster (portrait) | `poster.tex` | `tikzposter` |
 | Scientific poster (landscape) | `poster-landscape.tex` | `tikzposter` |
@@ -383,7 +332,7 @@ When uncertain about LaTeX patterns, compilation issues, or document quality, co
 | Format Conversion (Pandoc) | [format-conversion.md](references/format-conversion.md) | Markdown/DOCX/HTML to/from LaTeX |
 | Tables and Images | [tables-and-images.md](references/tables-and-images.md) | Colored rows, multi-row/column, booktabs, long tables, images, TikZ |
 | Charts and Graphs (pgfplots) | [charts-and-graphs.md](references/charts-and-graphs.md) | Line plots, bar charts, scatter plots, pie charts in pgfplots |
-| IEEE Journal Two-Column Typography | [ieee-journal-twocolumn-guide.md](references/ieee-journal-twocolumn-guide.md) | IEEEtran journal layout, float rules, XeLaTeX vs. pdfLaTeX, bibliography, Markdown-to-IEEE workflow, sample PNGs in `examples/ieee-twocolumn*.png` |
+| IEEE Journal Two-Column Typography | [ieee-journal-twocolumn-guide.md](references/ieee-journal-twocolumn-guide.md) | IEEEtran journal layout, float rules, XeLaTeX vs. pdfLaTeX, bibliography, and Markdown-to-IEEE workflow |
 | LaTeX Packages | [packages.md](references/packages.md) | Common packages reference |
 | Poster Design Guide | [poster-design-guide.md](references/poster-design-guide.md) | Conference size presets, typography, color schemes, layout archetypes, content guidelines |
 | Resume ATS Guide | [resume-ats-guide.md](references/resume-ats-guide.md) | ATS rules, LaTeX pitfalls, keywords |
@@ -426,10 +375,9 @@ These cause `Undefined control sequence` -- always include the required package:
 ### Compilation Environment
 - If texlive is not installed, the compile script auto-installs it. Do NOT run multiple compile commands in parallel before texlive is installed -- they will all try to install simultaneously, causing dpkg lock contention. Install once first or run compiles sequentially.
 - The compile script uses `-interaction=nonstopmode` (not `-halt-on-error`) to ensure PDFs are produced even with warnings. This is intentional -- many documents produce warnings on first pass that resolve on subsequent passes.
-- **latexmk** and **texfot** are included with TeX Live. The setup script (`setup.sh`) verifies their availability. latexmk is used when `--use-latexmk` is passed; texfot is used automatically when available (default verbosity mode).
-- A `.chktexrc` configuration file is included at the skill root to suppress common false positives when linting generated LaTeX documents. The `latex_lint.sh` script uses it automatically.
+- **latexmk** and **texfot** are included with TeX Live. The setup script (`scripts/setup.sh`) verifies their availability. latexmk is used when `--use-latexmk` is passed; texfot is used automatically when available (default verbosity mode).
+- `assets/chktexrc` suppresses common false positives when linting generated LaTeX documents. The `latex_lint.sh` script loads it automatically.
 
 ## Long-Form Document Anti-Patterns
 
 For documents 5+ pages (reports, theses, books), read [references/long-form-best-practices.md](references/long-form-best-practices.md) for 9 critical anti-patterns, the report preamble best practices, and the content generation checklist. **This is MUST-READ material before generating any long document.**
-

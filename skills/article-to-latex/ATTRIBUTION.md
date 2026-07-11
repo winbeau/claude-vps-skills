@@ -9,7 +9,7 @@ Locally **renamed to `article-to-latex`** (skill `name:` + directory) to pair wi
 
 - **Repo**: https://github.com/ndpvt-web/latex-document-skill
 - **Author**: `ndpvt-web` ("Made with Claude Code on HappyCapy AI")
-- **License**: MIT (declared in the upstream `README.md` → "## License / MIT"; upstream ships
+- **License**: MIT (declared in the upstream README under "License / MIT"; upstream ships
   no standalone `LICENSE` file)
 - **Vendored at**: commit fetched 2026-06-25 via `git clone --depth 1`
 
@@ -33,8 +33,10 @@ See `SKILL.md` and `references/` for the full feature set.
 3. **Trimmed for repo size** (functionally lossless): removed `examples/` (~12 MB sample outputs),
    the `assets/capy-*.png` / `assets/happycapy-*.png` mascot branding images (~6.5 MB; not
    referenced by any template or script), and the upstream `.git/`, `.github/`, `tests/`, `stats/`
-   directories. Kept `SKILL.md`, `README.md`, `references/`, `scripts/`, `assets/templates/`,
-   `setup.sh`, `requirements.txt`, `.chktexrc`. **Full untrimmed skill is at the upstream repo.**
+   directories. Kept `SKILL.md`, `references/`, `scripts/`, `assets/templates/`,
+   `scripts/setup.sh`, `scripts/requirements.txt`, `assets/chktexrc`, and this attribution notice.
+   The human-facing upstream README is preserved at `docs/skills/article-to-latex.md`.
+   **Full untrimmed skill is at the upstream repo.**
 
 ## License notice
 

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Article to LaTeX"
+  short_description: "Create and compile professional LaTeX documents"
+  default_prompt: "Use $article-to-latex to typeset and compile this document as a professional PDF."

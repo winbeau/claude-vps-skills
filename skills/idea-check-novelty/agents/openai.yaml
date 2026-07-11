@@ -1,0 +1,4 @@
+interface:
+  display_name: "Idea Novelty Check"
+  short_description: "Check ideas against current online prior art"
+  default_prompt: "Use $idea-check-novelty to search online and assess the novelty of these candidates."

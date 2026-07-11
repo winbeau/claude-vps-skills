@@ -1,0 +1,4 @@
+interface:
+  display_name: "Idea Review"
+  short_description: "Score novelty, value, rigor, and feasibility"
+  default_prompt: "Use $idea-review to critically review and rank these research candidates."

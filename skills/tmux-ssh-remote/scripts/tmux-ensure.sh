@@ -2,7 +2,7 @@
 # tmux-ensure.sh — make sure a named tmux session exists and is healthy.
 #
 # Persistent state: the ssh-cmd used to create a session is stored to
-#   ~/.claude/skills/tmux-ssh-remote/.sessions/<session>.cmd
+#   <skill-dir>/scripts/.sessions/<session>.cmd
 # so subsequent calls (e.g. after a hang) can respawn without re-passing it.
 #
 # Usage:

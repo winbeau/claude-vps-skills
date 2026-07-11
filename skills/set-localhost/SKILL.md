@@ -94,8 +94,8 @@ doctor 通过后走 tmux-ssh-remote skill 正式验证:
 ```bash
 SESSION=$(basename "$(git rev-parse --show-toplevel 2>/dev/null || pwd)")
 SSH_CMD=$(/home/winbeau/bin/mybox ssh-cmd)
-~/.claude/skills/tmux-ssh-remote/tmux-ensure.sh "$SESSION" "$SSH_CMD"
-~/.claude/skills/tmux-ssh-remote/tmux-inject.sh -t 30 --auto-recover "$SESSION" 'hostname && whoami'
+~/.claude/skills/tmux-ssh-remote/scripts/tmux-ensure.sh "$SESSION" "$SSH_CMD"
+~/.claude/skills/tmux-ssh-remote/scripts/tmux-inject.sh -t 30 --auto-recover "$SESSION" 'hostname && whoami'
 ```
 
 `hostname`/`whoami` 与所选机器/用户名对上 → 宣布绑定完成,

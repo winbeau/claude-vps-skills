@@ -1,0 +1,4 @@
+interface:
+  display_name: "Notify Windows"
+  short_description: "Send a Windows desktop toast and sound alert"
+  default_prompt: "Use $notify-win to notify my Windows desktop when this task finishes."

@@ -130,8 +130,8 @@ trap "rm -f $TEMP_OUTPUT" EXIT
 
 # Build chktex command with optional .chktexrc config
 CHKTEX_ARGS=(-q -v0)
-# Look for .chktexrc in skill root (parent of scripts dir)
-SKILL_CHKTEXRC="${SCRIPT_DIR}/../.chktexrc"
+# Use the Skill-bundled chktex configuration.
+SKILL_CHKTEXRC="${SCRIPT_DIR}/../assets/chktexrc"
 if [[ -f "$SKILL_CHKTEXRC" ]]; then
     CHKTEX_ARGS+=(-l "$SKILL_CHKTEXRC")
 fi

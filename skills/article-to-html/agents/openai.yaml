@@ -1,0 +1,4 @@
+interface:
+  display_name: "Article to HTML"
+  short_description: "Render documents as single-file article HTML"
+  default_prompt: "Use $article-to-html to render this draft as a polished single-file HTML document."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "XJU DOCX"
+  short_description: "Format validate and repair XJU academic DOCX files"
+  default_prompt: "Use $xju-docx to format, validate, or repair this Xinjiang University DOCX."
