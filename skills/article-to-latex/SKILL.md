@@ -357,6 +357,12 @@ When uncertain about LaTeX patterns, compilation issues, or document quality, co
 - After compilation, read the PNG preview files to show the user how the document looks
 - PNG previews require `poppler-utils` (auto-installed by script)
 
+### Beamer Frame-Title Decorations (MUST READ)
+- Never draw a separator or progress bar in the frame-title region with `remember picture,overlay`, a `current page.north ...` anchor, and a hard-coded vertical offset. Page overlays do not reserve layout space and can paint over CJK downstrokes or Latin descenders.
+- For a custom frame title, omit fixed `ht`/`dp` so the `beamercolorbox` follows its content; use `vmode`, `\strut\insertframetitle\strut\par`, and at least `1.2mm` of explicit bottom padding. Put the separator in normal vertical flow after the title box, using a `\rule` or a second `beamercolorbox`.
+- A decorative overlay is acceptable only when it is outside the measured title-text bounds and never serves as the title's separator. Prefer Beamer's `\logo` mechanism for logos.
+- Before delivery, render title QA frames containing (1) CJK text, (2) Latin descenders such as `g/p/q/y`, and (3) a wrapped two-line title. At 150 dpi, keep at least about 7 clear pixels (roughly `1.2mm`) between the lowest glyph pixel and any rule. See [Beamer frame-title separator safety](references/beamer-guide.md#frame-title-separator-safety).
+
 ### Package Dependency Errors (MUST READ)
 These cause `Undefined control sequence` -- always include the required package:
 

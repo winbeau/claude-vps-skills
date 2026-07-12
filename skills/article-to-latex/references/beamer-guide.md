@@ -1587,27 +1587,89 @@ Or use custom commands:
 ```latex
 % In preamble:
 \logo{\includegraphics[height=0.8cm]{logo.png}}
+```
 
-% Or position manually:
-\addtobeamertemplate{frametitle}{}{%
+Prefer Beamer's `\logo` mechanism. A page-anchored overlay in `frametitle` can cover a long or wrapped title because it reserves no layout space. If a theme ignores `\logo`, build the logo into a normal-flow headline or frame-title box and reserve its full width plus padding.
+
+### Frame-Title Separator Safety
+
+Do not place a separator by guessing a page-top coordinate. The following is unsafe: the title box may be taller than the hard-coded offset, especially for CJK, Latin descenders (`g`, `p`, `q`, `y`), a different font, or a wrapped title.
+
+```latex
+% WRONG: an overlay does not reserve space and is painted over the title.
+\setbeamertemplate{frametitle}{%
+  \begin{beamercolorbox}[wd=\paperwidth,ht=0.88cm,dp=0.18cm]{frametitle}
+    \insertframetitle
+  \end{beamercolorbox}
   \begin{tikzpicture}[remember picture,overlay]
-    \node[anchor=north east,yshift=-2pt] at (current page.north east) {\includegraphics[height=0.8cm]{logo.png}};
+    \fill[black!20]
+      ([yshift=-0.89cm]current page.north west) rectangle
+      ([yshift=-0.93cm]current page.north east);
   \end{tikzpicture}
 }
 ```
 
-### Progress Bar
-
-Add a progress bar at the top of each slide:
+Make the title box content-sized and put the rule after it in normal vertical flow:
 
 ```latex
-\usepackage{tikz}
+\definecolor{FrameAccent}{RGB}{19,124,139}
+\definecolor{FrameRule}{RGB}{216,221,218}
+\newlength{\FrameTitleAccentWidth}
+\setlength{\FrameTitleAccentWidth}{2.2cm}
 
-\addtobeamertemplate{frametitle}{}{%
-  \begin{tikzpicture}[remember picture,overlay]
-    \fill[blue!30] (current page.north west) rectangle ([yshift=-0.5cm]current page.north east);
-    \fill[blue!70] (current page.north west) rectangle ([yshift=-0.5cm,xshift=\paperwidth*\insertframenumber/\inserttotalframenumber]current page.north west);
-  \end{tikzpicture}
+\setbeamertemplate{frametitle}{%
+  \nointerlineskip%
+  \begin{beamercolorbox}[
+    wd=\paperwidth,
+    leftskip=1.25em,
+    rightskip=1.25em,
+    sep=0pt,
+    vmode
+  ]{frametitle}%
+    \vspace*{0.15cm}%
+    \usebeamerfont{frametitle}\strut\insertframetitle\strut\par%
+    \vspace*{0.16cm}% % >= 1.2 mm below the glyphs
+  \end{beamercolorbox}%
+  \nointerlineskip%
+  \begin{beamercolorbox}[wd=\paperwidth,sep=0pt,vmode]{normal text}%
+    \hbox to \paperwidth{%
+      {\color{FrameAccent}\rule{\FrameTitleAccentWidth}{0.04cm}}%
+      {\color{FrameRule}\rule{\dimexpr\paperwidth-\FrameTitleAccentWidth\relax}{0.04cm}}%
+    }%
+  \end{beamercolorbox}%
+}
+```
+
+The important properties are structural: no fixed `ht`/`dp` for text, `vmode` so vertical padding is honored, struts for stable font metrics, explicit bottom padding, and an in-flow rule. Fixed height is fine for the rule itself because the rule contains no text.
+
+Render three QA frames before delivery: a CJK title, a title containing `g/p/q/y`, and a wrapped two-line title. At 150 dpi, require at least about 7 clear pixels (roughly `1.2mm`) between the lowest glyph pixel and the separator.
+
+### Progress Bar
+
+Add a progress bar above the frame title through Beamer's `headline` region. The headline participates in layout, so it cannot paint over the title:
+
+```latex
+\newlength{\FrameProgressWidth}
+\setbeamercolor{frame progress}{fg=blue!70,bg=blue!30}
+\setbeamertemplate{headline}{%
+  % Clamp the first pass, when the saved total may still be smaller than
+  % the current frame number. The next LaTeX pass supplies the final total.
+  \ifnum\insertframenumber>\inserttotalframenumber
+    \setlength{\FrameProgressWidth}{\paperwidth}%
+  \else
+    \setlength{\FrameProgressWidth}{%
+      \dimexpr\paperwidth*\insertframenumber/\inserttotalframenumber\relax}%
+  \fi
+  \nointerlineskip%
+  \begin{beamercolorbox}[
+    wd=\paperwidth,
+    ht=0.5ex,
+    dp=0pt,
+    left
+  ]{frame progress}%
+    \usebeamercolor[fg]{frame progress}%
+    \rule{\FrameProgressWidth}{0.5ex}%
+  \end{beamercolorbox}%
 }
 ```
 

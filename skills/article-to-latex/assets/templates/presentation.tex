@@ -24,6 +24,21 @@
 % Slide numbers
 \setbeamertemplate{footline}[frame number]
 
+% Keep frame-title decoration in normal flow. Page-anchored overlays can
+% cover CJK downstrokes, Latin descenders, or a wrapped second title line.
+\newlength{\FrameTitleAccentWidth}
+\setlength{\FrameTitleAccentWidth}{2.2cm}
+\addtobeamertemplate{frametitle}{}{%
+  \nointerlineskip%
+  \begin{beamercolorbox}[wd=\paperwidth,sep=0pt,vmode]{normal text}%
+    \vspace*{1.2mm}%
+    \hbox to \paperwidth{%
+      {\color{primary}\rule{\FrameTitleAccentWidth}{0.4mm}}%
+      {\color{black!15}\rule{\dimexpr\paperwidth-\FrameTitleAccentWidth\relax}{0.4mm}}%
+    }%
+  \end{beamercolorbox}%
+}
+
 % Metadata
 \title[Short Title]{Full Presentation Title}
 \subtitle{Subtitle or Context}
