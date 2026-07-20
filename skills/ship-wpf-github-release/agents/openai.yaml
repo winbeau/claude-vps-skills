@@ -1,0 +1,4 @@
+interface:
+  display_name: "Ship WPF GitHub Release"
+  short_description: "Build, package, and release WPF apps on GitHub"
+  default_prompt: "Use $ship-wpf-github-release to set up or repair this WPF CI and GitHub Release pipeline."

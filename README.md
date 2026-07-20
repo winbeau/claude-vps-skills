@@ -30,6 +30,7 @@ Human-facing manuals live in `docs/skills/`. License and attribution files remai
 | [`idea-synthesize`](skills/idea-synthesize/) | Coordinate and summarize the idea discovery workflow |
 | [`notify-win`](skills/notify-win/) | Send a Windows desktop toast and sound alert |
 | [`set-localhost`](skills/set-localhost/) | Bind a tailnet device for the `mybox` remote workflow |
+| [`ship-wpf-github-release`](skills/ship-wpf-github-release/) | Build, package, and release WPF apps on GitHub |
 | [`tmux-ssh-remote`](skills/tmux-ssh-remote/) | Operate remote hosts through persistent tmux SSH sessions |
 | [`update-docs`](skills/update-docs/) | Update Feiyue release notes and public documentation |
 | [`xju-docx`](skills/xju-docx/) | Format, validate, and repair XJU academic DOCX files |
