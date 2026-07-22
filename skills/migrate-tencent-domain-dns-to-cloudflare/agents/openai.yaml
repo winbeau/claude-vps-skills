@@ -1,0 +1,4 @@
+interface:
+  display_name: "腾讯云域名迁移到 Cloudflare"
+  short_description: "安全迁移腾讯云或 DNSPod 域名权威 DNS 至 Cloudflare"
+  default_prompt: "使用 $migrate-tencent-domain-dns-to-cloudflare 将我的腾讯云或 DNSPod 域名安全迁移到 Cloudflare，并验证 NS 生效。"
