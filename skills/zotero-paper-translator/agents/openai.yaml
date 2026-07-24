@@ -1,0 +1,4 @@
+interface:
+  display_name: "Zotero 论文对照翻译"
+  short_description: "按收藏夹路径定位 Zotero 论文并逐段中英对照翻译"
+  default_prompt: "使用 $zotero-paper-translator 按 Zotero 收藏夹路径定位论文，载入 PDF 全文，并将指定章节逐段按原文、译文对照翻译。"

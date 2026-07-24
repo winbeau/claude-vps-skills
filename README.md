@@ -18,6 +18,7 @@ Human-facing manuals live in `docs/skills/`. License and attribution files remai
 
 | Skill | Purpose |
 |---|---|
+| [`academic-rebuttal`](skills/academic-rebuttal/) | Triage reviews, prioritize experiments, and draft evidence-grounded rebuttals |
 | [`academic-writing`](skills/academic-writing/) | Audit and rewrite academic prose without inventing evidence |
 | [`article-to-html`](skills/article-to-html/) | Render a document as a self-contained paper-style HTML file |
 | [`article-to-latex`](skills/article-to-latex/) | Create, compile, debug, and convert LaTeX/PDF documents |
@@ -35,6 +36,7 @@ Human-facing manuals live in `docs/skills/`. License and attribution files remai
 | [`tmux-ssh-remote`](skills/tmux-ssh-remote/) | Operate remote hosts through persistent tmux SSH sessions |
 | [`update-docs`](skills/update-docs/) | Update Feiyue release notes and public documentation |
 | [`xju-docx`](skills/xju-docx/) | Format, validate, and repair XJU academic DOCX files |
+| [`zotero-paper-translator`](skills/zotero-paper-translator/) | Locate Zotero papers by collection path and translate them paragraph by paragraph |
 
 The `idea-*` suite is domain-agnostic. World Model checks are loaded through optional domain profiles inside the relevant Skills.
 
@@ -85,9 +87,11 @@ python3 skills/xju-docx/scripts/check_docx_package.py /tmp/xju-smoke.docx
 
 Per-Skill manuals are under [`docs/skills/`](docs/skills/). Notable provenance:
 
+- `academic-rebuttal` is vendored from [TobiasLee/Rebuttal-Skill](https://github.com/TobiasLee/Rebuttal-Skill) at a fixed commit. Upstream declared no license; see [ATTRIBUTION.md](skills/academic-rebuttal/ATTRIBUTION.md) before redistribution or modification.
 - `article-to-latex` is a vendored, modified MIT Skill; see [ATTRIBUTION.md](skills/article-to-latex/ATTRIBUTION.md).
 - `humanizer-zh` keeps its upstream [LICENSE](skills/humanizer-zh/LICENSE).
 - `xju-docx` is synchronized from the local working copy and includes OOXML repair diagnostics. Its upstream canonical project remains [XjuSelab/xju-feiyue](https://github.com/XjuSelab/xju-feiyue).
+- `zotero-paper-translator` usage and lookup behavior are documented in [docs/skills/zotero-paper-translator.md](docs/skills/zotero-paper-translator.md).
 
 ## License
 

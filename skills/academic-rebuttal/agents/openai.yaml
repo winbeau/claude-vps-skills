@@ -1,0 +1,4 @@
+interface:
+  display_name: "Academic Rebuttal"
+  short_description: "Plan and draft evidence-grounded academic rebuttals"
+  default_prompt: "Use $academic-rebuttal to triage these reviews and plan an evidence-grounded response."
