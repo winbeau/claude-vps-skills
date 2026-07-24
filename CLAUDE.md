@@ -2,6 +2,12 @@
 
 This repository synchronizes personal Agent Skills, CLI helpers, and the global Claude Code prompt across machines.
 
+## Git workflow
+
+- Work directly on `main` for every change in this repository.
+- Commit and push to `origin/main`; do not create feature branches or pull requests unless the user explicitly requests one.
+- If the working tree is on another branch, switch to `main` before making or committing changes.
+
 ## Deploy requests
 
 When the user asks to deploy or synchronize this repository, run the relevant command and report its output:
