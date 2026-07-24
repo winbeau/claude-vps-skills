@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src data:; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'; connect-src 'none'">
+  <title>{{DOCUMENT_TITLE}}</title>
+  <style>
+    :root {
+      --page: #fffdfa;
+      --panel: #ffffff;
+      --ink: #252f3b;
+      --navy: #2c3a4a;
+      --muted: #6f7780;
+      --faint: #93999f;
+      --line: #dcdcdc;
+      --line-soft: #eeeeee;
+      --red: #8c1b13;
+      --red-dark: #71140e;
+      --red-soft: #f8eeec;
+      --link: #4d8093;
+      --meta: #596d7b;
+      --decision: #5b6f52;
+      --response: #8a6737;
+      --comment: #777777;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-width: 0;
+      overflow-x: hidden;
+      background: var(--page);
+      color: var(--ink);
+      font-family: "Noto Sans", "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Noto Sans CJK SC", sans-serif;
+      font-size: 14px;
+      line-height: 1.58;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--link); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    a:focus-visible { outline: 3px solid rgba(140, 27, 19, .28); outline-offset: 2px; }
+    .topbar { min-height: 48px; background: var(--red); border-bottom: 1px solid var(--red-dark); color: #fff; }
+    .topbar-inner { max-width: 1180px; min-height: 48px; margin: auto; padding: 0 20px; display: flex; align-items: center; gap: 24px; }
+    .brand { color: #fff; font-size: 19px; letter-spacing: -.02em; white-space: nowrap; }
+    .brand:hover { text-decoration: none; }
+    .brand strong { font-weight: 700; }
+    .source-nav { margin-left: auto; display: flex; gap: 18px; font-size: 12px; }
+    .source-nav a { color: #fff; opacity: .94; }
+    .page { max-width: 1120px; margin: 0 auto; padding: 34px 20px 80px; display: grid; grid-template-columns: minmax(0, 1fr) 235px; gap: 34px; }
+    .content { min-width: 0; }
+    .submission, .note-card { background: var(--panel); border: 1px solid var(--line); box-shadow: 0 1px 2px rgba(0,0,0,.025); }
+    .submission { border-top: 3px solid var(--red); padding: 25px 28px 26px; margin-bottom: 30px; scroll-margin-top: 16px; }
+    .submission-id, .metadata, .visibility, .note-meta, .note-id, .index-title, .capture-meta {
+      font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    }
+    .submission-id { color: var(--faint); font-size: 10px; letter-spacing: .04em; margin-bottom: 8px; }
+    h1 { margin: 0 0 12px; color: var(--navy); font-size: 29px; line-height: 1.22; letter-spacing: -.015em; overflow-wrap: anywhere; }
+    .authors { color: #485563; margin-bottom: 7px; overflow-wrap: anywhere; }
+    .metadata { display: flex; flex-wrap: wrap; gap: 5px 16px; color: var(--muted); font-size: 10px; text-transform: uppercase; margin-bottom: 9px; }
+    .visibility { color: var(--faint); font-size: 9.5px; margin: 6px 0 16px; }
+    .source-links { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 19px; }
+    .source-button { display: inline-block; border: 1px solid #c9c9c9; background: #fff; color: #45535f; border-radius: 3px; padding: 6px 10px; font-size: 12px; }
+    .source-button.primary { color: #fff; background: var(--red); border-color: var(--red); }
+    .discussion-title { color: var(--navy); margin: 0 0 20px; padding-bottom: 9px; border-bottom: 2px solid var(--red); font-size: 22px; line-height: 1.3; }
+    .note-card { position: relative; border-left: 4px solid var(--red); margin-bottom: 24px; scroll-margin-top: 16px; }
+    .note-card.meta-review { border-left-color: var(--meta); }
+    .note-card.decision { border-left-color: var(--decision); }
+    .note-card.author-response { border-left-color: var(--response); }
+    .note-card.comment, .note-card.other, .note-card.revision, .note-card.withdrawal { border-left-color: var(--comment); }
+    .note-card.selected-note { box-shadow: 0 0 0 3px rgba(140,27,19,.14); }
+    .selected-badge { display: inline-block; margin-left: 8px; color: var(--red); background: var(--red-soft); border: 1px solid #e7cbc6; border-radius: 10px; padding: 1px 7px; font-size: 9px; vertical-align: middle; text-transform: uppercase; letter-spacing: .05em; }
+    .note-head { padding: 17px 21px 15px; border-bottom: 1px solid var(--line-soft); background: #fafafa; }
+    .note-title { margin: 0 110px 5px 0; color: var(--navy); font-size: 16px; line-height: 1.38; }
+    .note-meta { display: flex; flex-wrap: wrap; gap: 3px 13px; color: var(--muted); font-size: 10px; text-transform: uppercase; }
+    .note-id { position: absolute; right: 13px; top: 15px; font-size: 9px; }
+    .note-body { padding: 8px 21px 22px; }
+    .field { border-bottom: 1px solid var(--line-soft); padding: 14px 0 15px; }
+    .field:last-child { border-bottom: 0; padding-bottom: 0; }
+    .field h3 { color: var(--navy); font-size: 13px; line-height: 1.4; margin: 0 0 7px; }
+    .field h4 { color: #394957; font-size: 13px; margin: 16px 0 6px; }
+    .field-content p { margin: 0 0 10px; }
+    .field-content p:last-child { margin-bottom: 0; }
+    .field-content ul, .field-content ol { margin: 7px 0 5px 22px; padding: 0; }
+    .field-content li { margin: 5px 0; }
+    .score-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; border-bottom: 1px solid var(--line-soft); padding: 14px 0 15px; }
+    .score { border: 1px solid #eadad6; background: var(--red-soft); padding: 10px 11px; }
+    .score-label { color: var(--muted); font: 9px/1.35 ui-monospace, Menlo, Consolas, monospace; letter-spacing: .05em; text-transform: uppercase; }
+    .score-value { color: var(--red); font-weight: 700; margin-top: 3px; }
+    .callout-field { border: 1px solid #dbc7c2; background: var(--red-soft); padding: 12px 14px; margin: 10px 0; }
+    .callout-field .field-label { color: var(--red); font-weight: 700; }
+    .check-row { display: grid; grid-template-columns: 205px 1fr; gap: 14px; border-bottom: 1px solid var(--line-soft); padding: 8px 0; }
+    .check-row .field-label { color: var(--navy); font-weight: 700; font-size: 12px; }
+    .sidebar { position: relative; }
+    .discussion-index { position: sticky; top: 20px; background: var(--panel); border: 1px solid var(--line); padding: 16px; }
+    .index-title { color: var(--faint); font-size: 10px; letter-spacing: .08em; margin-bottom: 10px; }
+    .discussion-index a { display: block; border-left: 2px solid #ddd; color: #50606d; padding: 5px 0 5px 10px; margin: 2px 0; font-size: 12px; }
+    .discussion-index a:hover, .discussion-index a.active { color: var(--red); border-left-color: var(--red); text-decoration: none; }
+    .index-kind { color: var(--faint); font-size: 9px; margin-left: 4px; text-transform: uppercase; }
+    .privacy-note { border: 1px solid #eadad6; background: var(--red-soft); color: #594743; padding: 13px 15px; margin-top: 28px; font-size: 12px; }
+    footer { border-top: 1px solid var(--line); color: var(--faint); margin-top: 30px; padding-top: 18px; }
+    .capture-meta { font-size: 10px; line-height: 1.6; overflow-wrap: anywhere; }
+    @media (max-width: 850px) {
+      .page { grid-template-columns: minmax(0, 1fr); }
+      .sidebar { order: -1; min-width: 0; }
+      .discussion-index { position: static; min-width: 0; display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 2px 10px; }
+      .index-title { grid-column: 1 / -1; }
+    }
+    @media (max-width: 620px) {
+      .topbar-inner { min-height: 44px; padding: 8px 12px; }
+      .brand { font-size: 18px; }
+      .source-nav { gap: 9px; font-size: 11px; min-width: 0; }
+      .source-nav a:first-child { display: none; }
+      .page { width: 100%; max-width: 100%; padding: 20px 10px 55px; overflow: hidden; }
+      .content, .sidebar, .submission, .note-card, .discussion-index { width: 100%; max-width: 100%; min-width: 0; }
+      .submission, .note-head, .note-body { padding-left: 15px; padding-right: 15px; }
+      h1 { font-size: 23px; }
+      .metadata { gap: 4px 10px; }
+      .note-title { margin-right: 0; overflow-wrap: anywhere; }
+      .note-id { position: static; display: block; margin-top: 7px; overflow-wrap: anywhere; }
+      .field-content, .check-row, .score { min-width: 0; overflow-wrap: anywhere; }
+      .score-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .check-row { grid-template-columns: 1fr; gap: 2px; }
+      .discussion-index { grid-template-columns: 1fr; }
+    }
+    @media print {
+      body { background: #fff; }
+      .topbar, .sidebar { display: none; }
+      .page { display: block; max-width: none; padding: 0; }
+      .submission, .note-card { box-shadow: none; break-inside: avoid-page; }
+      a { color: inherit; text-decoration: underline; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="https://openreview.net/" rel="noopener noreferrer"><strong>OpenReview</strong>.net</a>
+      <div class="source-nav">
+        <a href="#discussion">Discussion</a>
+        <a href="{{FORUM_URL}}" rel="noopener noreferrer">Original forum</a>
+      </div>
+    </div>
+  </nav>
+  <main class="page">
+    <div class="content">
+      {{SUBMISSION_HTML}}
+      <h2 class="discussion-title" id="discussion">Discussion · {{NOTE_COUNT}} captured {{NOTE_NOUN}}</h2>
+      {{NOTES_HTML}}
+      <div class="privacy-note"><strong>Local export:</strong> this file may contain non-public OpenReview material. It does not carry the source site's access controls.</div>
+      <footer>
+        <div class="capture-meta">Captured {{CAPTURED_AT}} · Forum {{FORUM_ID}} · Source <a href="{{CAPTURED_URL}}" rel="noopener noreferrer">{{CAPTURED_URL_TEXT}}</a></div>
+      </footer>
+    </div>
+    <aside class="sidebar">
+      <nav class="discussion-index" aria-label="Discussion index">
+        <div class="index-title">DISCUSSION INDEX</div>
+        {{INDEX_HTML}}
+      </nav>
+    </aside>
+  </main>
+  <script>
+    (() => {
+      const links = Array.from(document.querySelectorAll('.discussion-index a'));
+      const targets = links.map(link => document.querySelector(link.getAttribute('href'))).filter(Boolean);
+      if (!('IntersectionObserver' in window)) return;
+      const observer = new IntersectionObserver(entries => {
+        const visible = entries.filter(entry => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (!visible) return;
+        links.forEach(link => link.classList.toggle('active', link.getAttribute('href') === '#' + visible.target.id));
+      }, { rootMargin: '-12% 0px -72% 0px', threshold: [0, .05, .2] });
+      targets.forEach(target => observer.observe(target));
+    })();
+  </script>
+</body>
+</html>

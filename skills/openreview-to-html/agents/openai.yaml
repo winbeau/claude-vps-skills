@@ -1,0 +1,4 @@
+interface:
+  display_name: "OpenReview to HTML"
+  short_description: "Capture authenticated OpenReview threads as portable HTML"
+  default_prompt: "Use $openreview-to-html to capture these OpenReview links and export the complete discussion as a self-contained HTML file."

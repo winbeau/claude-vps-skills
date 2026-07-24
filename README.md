@@ -29,6 +29,7 @@ Human-facing manuals live in `docs/skills/`. License and attribution files remai
 | [`idea-design-experiment`](skills/idea-design-experiment/) | Design low-cost falsifiable experiments |
 | [`idea-synthesize`](skills/idea-synthesize/) | Coordinate and summarize the idea discovery workflow |
 | [`notify-win`](skills/notify-win/) | Send a Windows desktop toast and sound alert |
+| [`openreview-to-html`](skills/openreview-to-html/) | Capture authenticated OpenReview discussions as self-contained HTML |
 | [`set-localhost`](skills/set-localhost/) | Bind a tailnet device for the `mybox` remote workflow |
 | [`ship-wpf-github-release`](skills/ship-wpf-github-release/) | Build, package, and release WPF apps on GitHub |
 | [`tmux-ssh-remote`](skills/tmux-ssh-remote/) | Operate remote hosts through persistent tmux SSH sessions |
